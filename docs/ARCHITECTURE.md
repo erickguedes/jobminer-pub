@@ -72,7 +72,7 @@ Server function receives request
         ▼
 Builds prompt with:
   ├── User's resume (from Supabase)
-  ├── Optional KB files (from Storage)
+  ├── Optional KB files (local gitignored markdown)
   └── Job description + instructions
         │
         ▼
@@ -105,7 +105,8 @@ Browser receives file as download
 
 ## Security
 
-- **Row-Level Security** — every Supabase table has `USING (user_id = auth.uid())`
+- **Row-Level Security** — every Supabase table enforces `USING (user_id = auth.uid())` (child tables via subqueries to parent)
 - **JWT authentication** — all server functions validate the Supabase session
+- **Server-only code convention** — files suffixed `.server.ts` are tree-shaken from the browser bundle, keeping API keys safe
 - **No sensitive data in public repo** — KB files, API keys, and secrets are never committed
-- **API keys** stored as Vercel Environment Variables
+- **API keys** stored as Vercel Environment Variables (no `VITE_` prefix on server-only keys)
